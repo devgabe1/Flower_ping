@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="img/flowers.png" type="image/x-icon">
     <title>Flowers</title>
+    <!-- Mova o script da API do YouTube para o cabeçalho -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
     <div class="greetings">
@@ -20,6 +22,11 @@
     <!-- Botão de play para o áudio do vídeo -->
     <div class="audio-button">
         <button id="playButton">Play Áudio</button>
+    </div>
+
+    <!-- Adicionando um segundo botão para ir para "flower.html" -->
+    <div class="flower-button">
+        <button id="flowerButton">Ir para Flower</button>
     </div>
 
     <!-- Substitua 'VIDEO_ID' pelo ID do vídeo do YouTube -->
@@ -44,10 +51,13 @@
             // O vídeo está pronto para ser reproduzido
             // Você pode adicionar ações adicionais aqui se necessário
             setupAudioButton();
+            setupFlowerButton();
+            restoreAudioState(); // Restaura o estado do áudio ao carregar a página
         }
 
         function onPlayerStateChange(event) {
             // Aqui você pode lidar com mudanças no estado do player, se necessário
+            saveAudioState(); // Salva o estado do áudio quando ele muda
         }
 
         function setupAudioButton() {
@@ -66,9 +76,49 @@
                 isAudioPlaying = !isAudioPlaying;
             });
         }
-    </script>
 
-    <!-- Script para carregar a API do YouTube -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+        function setupFlowerButton() {
+            var flowerButton = document.getElementById('flowerButton');
+            flowerButton.addEventListener('click', function () {
+                // Salva o estado do áudio antes de navegar
+                saveAudioState();
+
+                // Redireciona para a página "flower.html"
+                window.location.href = 'flower.html';
+            });
+        }
+
+        // Funções para persistir o estado do áudio usando localStorage
+        function saveAudioState() {
+            var isAudioPlaying = player.getPlayerState() === YT.PlayerState.PLAYING;
+            localStorage.setItem('audioState', isAudioPlaying);
+        }
+
+        function restoreAudioState() {
+            var savedAudioState = localStorage.getItem('audioState');
+            if (savedAudioState === 'true') {
+                player.playVideo();
+            }
+        }
+
+        // Evento beforeunload para garantir que o estado do áudio seja salvo ao sair da página
+        window.addEventListener('beforeunload', function () {
+            saveAudioState();
+        });
+
+        // Evento popstate para restaurar o estado ao voltar
+        window.addEventListener('popstate', function () {
+            restoreAudioState();
+        });
+
+        // Evento visibilitychange para lidar com mudanças de visibilidade
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') {
+                restoreAudioState();
+            } else {
+                saveAudioState();
+            }
+        });
+    </script>
 </body>
 </html>
