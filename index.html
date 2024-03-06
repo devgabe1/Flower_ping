@@ -16,28 +16,40 @@
     <div class="description">
         <span>Feliz dia das Mulheres!</span>
     </div>
-
     <div class="button">
-        <!-- Remova a tag <a> do interior do botão, pois ela não é necessária para a ação de redirecionamento -->
-        <button onclick="playAudioAndNavigate()">Clica</button>
+        <button onclick="playAudioAndNavigate()">
+            <a href="flower.html">Clica</a>
+        </button>
     </div>
-
-    <audio id="meuAudio">
+    
+    <audio id="meuAudio" controls>
       <source src="partilhar.mp3" type="audio/mp3">
+      Seu navegador não suporta o elemento de áudio.
     </audio>
-
+    
     <script>
-        function playAudioAndNavigate() {
-            var audio = document.getElementById('meuAudio');
-            
-            // Verifique se o áudio já está tocando antes de tentar reproduzir
-            if (audio.paused) {
-                audio.play();
-            }
+    // Verifica se o áudio estava tocando antes da navegação e restaura o estado
+    window.onload = function() {
+      var audio = document.getElementById('meuAudio');
+      var audioState = localStorage.getItem('audioState');
+      
+      if (audioState === 'playing') {
+        audio.play();
+      }
+    };
 
-            // Adicione esta linha se quiser redirecionar para "flower.html" após clicar no botão
-            window.location.href = 'flower.html';
-        }
+    function playAudioAndNavigate() {
+      var audio = document.getElementById('meuAudio');
+      audio.play();
+
+      // Salva o estado do áudio antes de navegar
+      localStorage.setItem('audioState', 'playing');
+
+      // Aguarda um curto período antes de navegar para garantir que o áudio tenha tempo para começar a tocar
+      setTimeout(function() {
+        window.location.href = 'flower.html';
+      }, 500);
+    }
     </script>
 </body>
 </html>
