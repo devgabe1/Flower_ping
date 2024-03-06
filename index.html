@@ -16,40 +16,52 @@
     <div class="description">
         <span>Feliz dia das Mulheres!</span>
     </div>
-    <div class="button">
-        <button onclick="playAudioAndNavigate()">
-            <a href="flower.html">Clica</a>
-        </button>
+    
+    <!-- Botão de play para o áudio do vídeo -->
+    <div class="audio-button">
+        <button onclick="toggleAudio()">Play Áudio</button>
     </div>
-    
-    <audio id="meuAudio" controls>
-      <source src="partilhar.mp3" type="audio/mp3">
-      Seu navegador não suporta o elemento de áudio.
-    </audio>
-    
+
+    <!-- Substitua 'VIDEO_ID' pelo ID do vídeo do YouTube -->
+    <div id="youtubeAudio" style="display: none;"></div>
+
     <script>
-    // Verifica se o áudio estava tocando antes da navegação e restaura o estado
-    window.onload = function() {
-      var audio = document.getElementById('meuAudio');
-      var audioState = localStorage.getItem('audioState');
-      
-      if (audioState === 'playing') {
-        audio.play();
-      }
-    };
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtubeAudio', {
+                height: '0',
+                width: '0',
+                videoId: 'ivHE7pQEEHI', // Substitua pelo ID do vídeo do YouTube
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
 
-    function playAudioAndNavigate() {
-      var audio = document.getElementById('meuAudio');
-      audio.play();
+        function onPlayerReady(event) {
+            // O vídeo está pronto para ser reproduzido
+            // Você pode adicionar ações adicionais aqui se necessário
+        }
 
-      // Salva o estado do áudio antes de navegar
-      localStorage.setItem('audioState', 'playing');
+        function onPlayerStateChange(event) {
+            // Aqui você pode lidar com mudanças no estado do player, se necessário
+        }
 
-      // Aguarda um curto período antes de navegar para garantir que o áudio tenha tempo para começar a tocar
-      setTimeout(function() {
-        window.location.href = 'flower.html';
-      }, 500);
-    }
+        // Função para reproduzir ou pausar o áudio do vídeo
+        function toggleAudio() {
+            var audioButton = document.querySelector('.audio-button button');
+            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                audioButton.textContent = 'Play Áudio';
+            } else {
+                player.playVideo();
+                audioButton.textContent = 'Pause Áudio';
+            }
+        }
     </script>
+
+    <!-- Script para carregar a API do YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
