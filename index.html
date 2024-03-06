@@ -10,8 +10,8 @@
 </head>
 <body>
     <div class="greetings">
-        <span>p</span>
-        <span>p</span>
+        <span>L</span>
+        <span>Ê</span>
     </div>
     <div class="description">
         <span>Feliz dia das Mulheres!</span>
@@ -19,7 +19,7 @@
     
     <!-- Botão de play para o áudio do vídeo -->
     <div class="audio-button">
-        <button onclick="toggleAudio()">Play Áudio</button>
+        <button id="playButton">Play Áudio</button>
     </div>
 
     <!-- Substitua 'VIDEO_ID' pelo ID do vídeo do YouTube -->
@@ -27,6 +27,7 @@
 
     <script>
         var player;
+
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtubeAudio', {
                 height: '0',
@@ -42,22 +43,28 @@
         function onPlayerReady(event) {
             // O vídeo está pronto para ser reproduzido
             // Você pode adicionar ações adicionais aqui se necessário
+            setupAudioButton();
         }
 
         function onPlayerStateChange(event) {
             // Aqui você pode lidar com mudanças no estado do player, se necessário
         }
 
-        // Função para reproduzir ou pausar o áudio do vídeo
-        function toggleAudio() {
-            var audioButton = document.querySelector('.audio-button button');
-            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                audioButton.textContent = 'Play Áudio';
-            } else {
-                player.playVideo();
-                audioButton.textContent = 'Pause Áudio';
-            }
+        function setupAudioButton() {
+            var playButton = document.getElementById('playButton');
+            var isAudioPlaying = false;
+
+            playButton.addEventListener('click', function () {
+                if (!isAudioPlaying) {
+                    player.playVideo();
+                    playButton.textContent = 'Pause Áudio';
+                } else {
+                    player.pauseVideo();
+                    playButton.textContent = 'Play Áudio';
+                }
+
+                isAudioPlaying = !isAudioPlaying;
+            });
         }
     </script>
 
