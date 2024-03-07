@@ -8,20 +8,57 @@
 
     <link rel="icon" href="img/flowers.png" type="image/x-icon">
     <title>flowers</title>
-    <audio autoplay>
-      <source src="partilhar.mp3" type="audio/mp3">
-    </audio>
 </head>
 
-<body>
-<div class="greetings">
-      <span>T</span>
-      <span>o</span>
-      <span>n</span>
-      <span>h</span>
-      <span>a</span>
+<body style="position: relative;">
+
+  <!-- Conteúdo da página -->
+
+  <!-- Botão de play para o áudio da música -->
+  <div class="audio-button" style="position: absolute; top: 16%; left: 50%; transform: translate(-50%, -50%); z-index: 999;">
+      <button id="playButton" style="font-size: 16px; padding: 5px 5px; cursor: pointer;">Play Áudio</button>
   </div>
+
+  <!-- Elemento de áudio oculto -->
+  <audio id="audioPlayer" src="partilhar.aac"  style="display: none;"></audio>
+
+  <script>
+      var audioPlayer;
+      var isAudioPlaying = false;
+
+      document.addEventListener('DOMContentLoaded', function () {
+          audioPlayer = document.getElementById('audioPlayer');
+          setupAudioButton();
+      });
+
+      function setupAudioButton() {
+          var playButton = document.getElementById('playButton');
+
+          playButton.addEventListener('click', function () {
+              if (!isAudioPlaying) {
+                  playAudio();
+              }
+
+              isAudioPlaying = true;
+          });
+      }
+
+      function playAudio() {
+          return audioPlayer.play().catch(function (error) {
+              // Tratamento de erros, se necessário
+              console.error('Erro ao reproduzir áudio:', error);
+          });
+      }
+  </script>
 </body>
+
+<body>
+  <div class="greetings">
+        <span>♡</span>
+        <span>Pinguinho</span>
+    </div>
+  </body>
+
 <body class="container">
     <div class="night"></div>
 
